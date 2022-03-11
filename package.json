@@ -1,0 +1,25 @@
+{
+  "name": "brotisch",
+  "version": "0.1.0",
+  "description": "Brotisch Backend",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Frooastside/Brotisch.git"
+  },
+  "author": "Frooastside",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Frooastside/Brotisch/issues"
+  },
+  "homepage": "https://brotisch.wolkeneis.dev/",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "passport": "^0.5.2",
+    "passport-wolkeneis": "^0.1.4",
+    "session-file-store": "^1.5.0"
+  }
+}
