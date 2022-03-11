@@ -31,6 +31,8 @@ const { authenticate } = require('./routes');
 
 app.use('/authenticate', authenticate);
 
+app.use(express.static(__dirname + '/frontend/build/'))
+
 app.get('*', (req, res) => {
   res.sendFile(__dirname + '/frontend/build/index.html');
 });
