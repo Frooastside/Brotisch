@@ -34,7 +34,7 @@ app.use('/authenticate', authenticate);
 
 app.use('/', express.static(path.join(__dirname, '/frontend/build/')));
 
-app.get('*', (req, res) => {
+app.get('/index.html', (req, res) => {
   res.sendFile(__dirname + '/frontend/build/index.html');
 });
 
