@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express'),
+  crypto = require('crypto'),
   util = require('util'),
   exec = util.promisify(require('child_process').exec);
 
