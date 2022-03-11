@@ -3,7 +3,7 @@
 const express = require('express'),
   crypto = require('crypto'),
   util = require('util'),
-  { execFileSync } = require('child_process');
+  execFile = util.promisify(require('child_process').execFile);
 
 const router = express.Router();
 
@@ -20,12 +20,17 @@ router.post('/push', (req, res) => {
   }
 
   try {
-    const { stdout, stderr } = execFileSync(__dirname + '/../updatew');
-    if(stderr) {
-      return res.status(500).send(stderr);
-    }
-    res.send(stdout);
+    execFile(__dirname + '/../updatew',)
+      .then(({ stdout, stderr }) => {
+        if (stderr) {
+          console.error(stderr);
+          return res.status(500).send(stderr);
+        }
+        console.log(stdout);
+    });
+    res.sendStatus(204);
   } catch (error) {
+    console.error(error);
     res.status(500).send("An error occurred on updating!");
   }
 });
