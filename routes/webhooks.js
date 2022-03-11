@@ -3,7 +3,7 @@
 const express = require('express'),
   crypto = require('crypto'),
   util = require('util'),
-  exec = util.promisify(require('child_process').exec);
+  exec = util.promisify(require('child_process').execFile);
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.post('/push', (req, res) => {
   }
 
   try {
-    const { stdout, stderr } = exec(__dirname + '/../updatew');
+    const { stdout, stderr } = await execFile(__dirname + '/../updatew');
     res.send(stdout);
   } catch (error) {
     res.status(500).send("An error occurred on updating!");
