@@ -46,6 +46,6 @@ app.get('*', (req, res) => {
   res.sendFile(__dirname + '/frontend/build/index.html');
 });
 
-const server = app.listen(process.env.PORT || 6000);
+app.listen(process.env.PORT || 6000);
 
 module.exports = app;
