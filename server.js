@@ -5,7 +5,8 @@ require('dotenv').config();
 const express = require('express'),
   session = require('express-session'),
   FileStore = require('session-file-store')(session),
-  passport = require('passport');
+  passport = require('passport'),
+  path = require('path');
 
 const app = express();
 
@@ -31,7 +32,7 @@ const { authenticate } = require('./routes');
 
 app.use('/authenticate', authenticate);
 
-app.use(express.static(__dirname + '/frontend/build/'))
+app.use('/', express.static(path.join(__dirname, '/frontend/build/')));
 
 app.get('*', (req, res) => {
   res.sendFile(__dirname + '/frontend/build/index.html');
