@@ -29,13 +29,16 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
+    setTheme(theme === 'dark-theme' ? darkTheme : lightTheme);
+    setTheme(darkTheme);
+    setTheme(muiTheme);
     if (theme) {
       localStorage.setItem('theme', theme);
     }
   }, [theme]);
 
   return (
-    <ThemeProvider theme={muiTheme}>
+    <ThemeProvider theme={darkTheme}>
       <Container>
         <Button>Test</Button>
       </Container>
