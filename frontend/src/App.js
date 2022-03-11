@@ -29,7 +29,6 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    setTheme(theme === 'dark-theme' ? darkTheme : lightTheme);
     if (theme) {
       localStorage.setItem('theme', theme);
     }
