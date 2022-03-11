@@ -24,7 +24,7 @@ router.post('/push', (req, res) => {
     if(stderr) {
       return res.status(500).send(stderr);
     }
-    res.send(stderr);
+    res.send(stdout);
   } catch (error) {
     res.status(500).send("An error occurred on updating!");
   }
