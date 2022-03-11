@@ -34,9 +34,9 @@ app.use('/authenticate', authenticate);
 
 app.use('/', express.static(path.join(__dirname, '/frontend/build/')));
 
-app.get('*', (req, res) => {
+/*app.get('*', (req, res) => {
   res.sendFile(__dirname + '/frontend/build/index.html');
-});
+});*/
 
 const server = app.listen(process.env.PORT || 6000);
 
