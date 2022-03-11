@@ -1,24 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import { Button, Container } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+import { selectTheme } from './redux/interfaceSlice';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+});
 
 function App() {
+  const [muiTheme, setTheme] = useState(darkTheme);
+  const theme = useSelector(state => state.interface.theme);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      dispatch(selectTheme(storedTheme));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    setTheme(theme === 'dark-theme' ? darkTheme : lightTheme);
+    if (theme) {
+      localStorage.setItem('theme', theme);
+    }
+  }, [theme]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={muiTheme}>
+      <Container>
+        <Button>Test</Button>
+      </Container>
+    </ThemeProvider>
   );
 }
 
