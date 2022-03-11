@@ -38,6 +38,8 @@ app.get('*', (req, res) => {
   res.sendFile(__dirname + '/frontend/build/index.html');
 });
 
+app.use('/', express.static(path.join(__dirname, '/frontend/build/')));
+
 const server = app.listen(process.env.PORT || 6000);
 
 module.exports = app;
