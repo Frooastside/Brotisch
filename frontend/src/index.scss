@@ -1,0 +1,55 @@
+@import '~normalize.css/normalize.css';
+
+.dark-theme {
+  --color-background: #222222;
+  --color-element: #333333;
+  --color-shadow-element: #333333;
+  --color-higher-element: #444444;
+  --color-element-hover: #555555;
+  --box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2);
+  --color-font: #ffffff;
+  --color-font-hover: #aaaaaa;
+  transition: background-color 1000ms ease, color 1000ms ease;
+}
+
+.light-theme {
+  --color-background: #ffffff;
+  --color-element: #dddddd;
+  --color-shadow-element: #ffffff;
+  --color-higher-element: #bbbbbb;
+  --color-element-hover: #aaaaaa;
+  --box-shadow: 0 0 10px 10px rgba(.2, .2, .2, .2);
+  --color-font: #000000;
+  --color-font-hover: #222222;
+  transition: background-color 1000ms ease, color 1000ms ease;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-element);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-higher-element);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-element-hover);
+}
