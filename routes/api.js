@@ -11,11 +11,29 @@ router.all('/',  (req, res) => {
 });
 
 router.post('/user/profile', ensureLoggedIn, (req, res) => {
-  res.json(fetchProfile(req.user.id));
+  const profile = fetchProfile(req.user.id);
+  if(!profile) {
+    return res.sendStatus(500);
+  }
+  res.json({
+    id: profile.id,
+    username: profile.username,
+    avatar: profile.avatar,
+    scopes: profile.scopes
+  });
 });
 
 router.post('/user/:userId/profile', ensureLoggedIn, (req, res) => {
-  res.json(fetchProfile(req.params.userId));
+  const profile = fetchProfile(req.params.userId);
+  if (!profile) {
+    return res.sendStatus(400);
+  }
+  res.json({
+    id: profile.id,
+    username: profile.username,
+    avatar: profile.avatar,
+    scopes: profile.scopes
+  });
 });
 
 function ensureLoggedIn(req, res, next) {

@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/push', (req, res) => {
   if (!req.rawBody) {
-    res.status(400).send('Request body empty!')
+    res.status(400).send('Request body empty!');
   }
 
   const sig = Buffer.from(req.get('X-Hub-Signature-256') || '', 'utf8');

@@ -13,6 +13,9 @@
     "url": "https://github.com/Frooastside/Brotisch/issues"
   },
   "homepage": "https://brotisch.wolkeneis.dev/",
+  "scripts": {
+    "lint": "eslint ."
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
@@ -22,5 +25,8 @@
     "passport": "^0.5.2",
     "passport-wolkeneis": "^0.1.4",
     "session-file-store": "^1.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.10.0"
   }
 }

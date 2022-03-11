@@ -1,9 +1,9 @@
 'use strict';
 
 const { JsonDB } = require('node-json-db'),
-  { Config } = require('node-json-db/dist/lib/JsonDBConfig')
+  { Config } = require('node-json-db/dist/lib/JsonDBConfig');
 
-const database = new JsonDB(new Config("profiles.json", true, true, '/'));
+const database = new JsonDB(new Config('profiles.json', true, true, '/'));
 
 
 function patchProfile(profile) {
@@ -29,7 +29,7 @@ function addScope(userId, scope) {
   const user = {
     id: userId,
     scopes: [scope]
-  }
+  };
   database.push('/profiles/' + userId, user, false);
 }
 

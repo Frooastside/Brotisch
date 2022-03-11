@@ -13,7 +13,7 @@ router.get('/callback', passport.authenticate('wolkeneis', {
   failureRedirect: '/'
 }), (req, res) => {
   if (process.env.REACT_APP) {
-    res.redirect(`${process.env.REACT_APP}/profile`)
+    res.redirect(`${process.env.REACT_APP}/profile`);
   } else {
     res.redirect('/profile');
   }
