@@ -12,7 +12,11 @@ router.get('/', passport.authenticate('wolkeneis'));
 router.get('/callback', passport.authenticate('wolkeneis', {
   failureRedirect: '/'
 }), (req, res) => {
-  res.redirect('/profile');
+  if (process.env.REACT_APP) {
+    res.redirect(`${process.env.REACT_APP}/profile`)
+  } else {
+    res.redirect('/profile');
+  }
 });
 
 module.exports = router;

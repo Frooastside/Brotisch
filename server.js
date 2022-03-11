@@ -2,7 +2,8 @@
 
 require('dotenv').config();
 
-const express = require('express'),
+const cors = require('cors'),
+  express = require('express'),
   session = require('express-session'),
   FileStore = require('session-file-store')(session),
   passport = require('passport'),
@@ -12,6 +13,13 @@ const app = express();
 
 app.set('trust proxy', 1);
 
+if(process.env.REACT_APP) {
+  app.use(cors({
+    origin: process.env.REACT_APP,
+    allowedHeaders: 'X-Requested-With, Content-Type',
+    credentials: true
+  }));
+}
 app.use(express.json({
   verify: (req, res, buf, encoding) => {
     if (buf && buf.length) {
@@ -35,9 +43,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-const { authenticate, webhooks } = require('./routes');
+const { authenticate, api, webhooks } = require('./routes');
 
 app.use('/authenticate', authenticate);
+app.use('/api', api);
 app.use('/webhooks', webhooks);
 
 app.use(express.static(path.join(__dirname, '/frontend/build/')));

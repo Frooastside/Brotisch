@@ -1,8 +1,9 @@
-import { Button, Container } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { selectTheme } from './redux/interfaceSlice';
+import CssBaseline from '@mui/material/CssBaseline';
+import Header from './components/header/Header';
 
 const darkTheme = createTheme({
   palette: {
@@ -16,7 +17,7 @@ const lightTheme = createTheme({
   },
 });
 
-function App() {
+const App = () => {
   const [muiTheme, setTheme] = useState(darkTheme);
   const theme = useSelector(state => state.interface.theme);
   const dispatch = useDispatch();
@@ -30,20 +31,17 @@ function App() {
 
   useEffect(() => {
     setTheme(theme === 'dark-theme' ? darkTheme : lightTheme);
-    setTheme(darkTheme);
-    setTheme(muiTheme);
     if (theme) {
       localStorage.setItem('theme', theme);
     }
   }, [theme]);
-
+  
   return (
-    <ThemeProvider theme={lightTheme}>
-      <Container>
-        <Button>Test</Button>
-      </Container>
+    <ThemeProvider theme={muiTheme}>
+      <CssBaseline />
+      <Header />
     </ThemeProvider>
   );
-}
+};
 
 export default App;
