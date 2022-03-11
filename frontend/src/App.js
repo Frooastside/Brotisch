@@ -38,7 +38,7 @@ function App() {
   }, [theme]);
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={lightTheme}>
       <Container>
         <Button>Test</Button>
       </Container>
