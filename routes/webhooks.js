@@ -13,7 +13,7 @@ router.post('/push', (req, res) => {
   }
 
   const sig = Buffer.from(req.get('X-Hub-Signature-256') || '', 'utf8');
-  const hmac = crypto.createHmac('sha256', secret);
+  const hmac = crypto.createHmac('sha256', process.env.PUSH_SECRET);
   const digest = Buffer.from('sha256' + '=' + hmac.update(req.rawBody).digest('hex'), 'utf8');
   if (sig.length !== digest.length || !crypto.timingSafeEqual(digest, sig)) {
     res.status(403).send(`Request body was not signed or verification failed: Request body digest (${digest}) did not match 'X - Hub - Signature - 256' (${sig})!`);
