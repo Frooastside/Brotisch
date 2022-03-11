@@ -12,7 +12,7 @@ router.get('/', passport.authenticate('wolkeneis'));
 router.get('/callback', passport.authenticate('wolkeneis', {
   failureRedirect: '/'
 }), (req, res) => {
-  res.redirect(process.env.CONTROL_ORIGIN + '/redirect/nodes');
+  res.redirect('/profile');
 });
 
 module.exports = router;
