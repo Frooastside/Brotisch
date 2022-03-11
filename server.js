@@ -32,7 +32,7 @@ const { authenticate } = require('./routes');
 app.use('/authenticate', authenticate);
 
 app.get('*', (req, res) => {
-  res.sendFile('frontend/build/index.html');
+  res.sendFile(__dirname + '/frontend/build/index.html');
 });
 
 const server = app.listen(process.env.PORT || 6000);
