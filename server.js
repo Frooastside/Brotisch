@@ -12,6 +12,13 @@ const app = express();
 
 app.set('trust proxy', 1);
 
+app.use(express.json({
+  verify: (req, res, buf, encoding) => {
+    if (buf && buf.length) {
+      req.rawBody = buf.toString(encoding || 'utf8');
+    }
+  }
+}));
 app.use(session({
   store: new FileStore(),
   secret: process.env.SECRET,
@@ -28,9 +35,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-const { authenticate } = require('./routes');
+const { authenticate, webhooks } = require('./routes');
 
 app.use('/authenticate', authenticate);
+app.use('/webhooks', webhooks);
 
 app.use(express.static(path.join(__dirname, '/frontend/build/')));
 
