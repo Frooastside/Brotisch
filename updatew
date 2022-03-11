@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git update-index --really-refresh
+git fetch
 
 UPSTREAM=${1:-'@{u}'}
 LOCAL=$(git rev-parse @)
@@ -18,7 +18,7 @@ elif [ $LOCAL = $BASE ]; then
     yarn
     yarn build
     cd ..
-    pm2 restart json
+    pm2 restart Brotisch
 elif [ $REMOTE = $BASE ]; then
     echo "Need to push"
 else
