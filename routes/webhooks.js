@@ -19,20 +19,18 @@ router.post('/push', (req, res) => {
     res.status(403).send(`Request body was not signed or verification failed: Request body digest (${digest}) did not match 'X - Hub - Signature - 256' (${sig})!`);
   }
 
-  try {
-    execFile(__dirname + '/../updatew',)
-      .then(({ stdout, stderr }) => {
-        if (stderr) {
-          console.error(stderr);
-          return res.status(500).send(stderr);
-        }
-        console.log(stdout);
+  execFile(__dirname + '/../updatew',)
+    .then(({ stdout, stderr }) => {
+      if (stderr) {
+        console.error(stderr);
+      }
+      console.log(stdout);
+    })
+    .catch((error) => {
+      console.error(error);
     });
-    res.sendStatus(204);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("An error occurred on updating!");
-  }
+
+  res.sendStatus(204);
 });
 
 module.exports = router;
