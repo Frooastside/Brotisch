@@ -21,7 +21,10 @@ router.post('/push', (req, res) => {
 
   try {
     const { stdout, stderr } = execFileSync(__dirname + '/../updatew');
-    res.send(stdout);
+    if(stderr) {
+      return res.status(500).send(stderr);
+    }
+    res.send(stderr);
   } catch (error) {
     res.status(500).send("An error occurred on updating!");
   }
