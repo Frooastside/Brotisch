@@ -6,9 +6,7 @@ const express = require('express'),
 
 const router = express.Router();
 
-router.get('/', passport.authenticate('wolkeneis'));
-
-router.get('/push', (req, res) => {
+router.post('/push', (req, res) => {
   if (!req.rawBody) {
     res.status(400).send('Request body empty!')
   }
