@@ -1,9 +1,9 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
-import { selectTheme } from './redux/interfaceSlice';
 import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from './components/header/Header';
+import { selectTheme } from './redux/interfaceSlice';
 
 const darkTheme = createTheme({
   palette: {
@@ -35,7 +35,7 @@ const App = () => {
       localStorage.setItem('theme', theme);
     }
   }, [theme]);
-  
+
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
