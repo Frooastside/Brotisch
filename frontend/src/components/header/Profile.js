@@ -12,15 +12,19 @@ const Profile = () => {
 
   return (
     <>
-      {
-        profile === undefined
-          ? <CircularProgress />
-          : <>
-            {profile === null
-              ? <Button href={`${process.env.REACT_APP_BACKEND}/authenticate`}>Login</Button>
-              : <Avatar>{profile.username.substring(0, 2)}</Avatar>
-            }
-          </>
+      {profile === undefined
+        ? <CircularProgress />
+        : <>
+          {profile === null
+            ? <Button href={`${process.env.REACT_APP_BACKEND}/authenticate`}>Login</Button>
+            : <>
+              {profile.avatar
+                ? <Avatar alt={profile.username} src={profile.avatar} />
+                : <Avatar>{profile.username.substring(0, 2)}</Avatar>
+              }
+            </>
+          }
+        </>
       }
     </>
   );
