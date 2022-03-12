@@ -1,2 +1,3 @@
 # Auto detect text files and perform LF normalization
+updatew text eol=lf
 *.js text eol=crlf
