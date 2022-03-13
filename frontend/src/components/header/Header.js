@@ -17,6 +17,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const navigateHome = () => navigate('/');
+
   return (
     <>
       <AppBar
@@ -33,10 +35,19 @@ const Header = () => {
             sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}>
             <MenuIcon />
           </IconButton>
-          <img alt="Brotisch Icon" height={40} src={Books} style={{ marginRight: '.5em' }} width={40} />
-          <Typography component="div" onClick={() => navigate('/')} sx={{
-            flexGrow: 1,
-            cursor: 'pointer'
+          <img
+            alt="Brotisch Icon"
+            height={40}
+            onClick={navigateHome}
+            src={Books}
+            style={{
+              cursor: 'pointer',
+              marginRight: '.5em'
+            }}
+            width={40} />
+          <Typography component="div" onClick={navigateHome} sx={{
+            cursor: 'pointer',
+            flexGrow: 1
           }} variant="h6">
             Brotisch
           </Typography>
