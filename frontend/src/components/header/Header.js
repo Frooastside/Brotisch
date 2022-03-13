@@ -5,6 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Books from '../../media/books.svg';
 import { toggleDrawer } from '../../redux/interfaceSlice';
 import Navigator from './Navigator';
 import Profile from './Profile';
@@ -13,6 +15,7 @@ const Header = () => {
   const drawerOpen = useSelector(state => state.interface.drawerOpen);
   const drawerWidth = useSelector(state => state.interface.drawerWidth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -30,7 +33,11 @@ const Header = () => {
             sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}>
             <MenuIcon />
           </IconButton>
-          <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
+          <img alt="Brotisch Icon" height={40} src={Books} style={{ marginRight: '.5em' }} width={40} />
+          <Typography component="div" onClick={() => navigate('/')} sx={{
+            flexGrow: 1,
+            cursor: 'pointer'
+          }} variant="h6">
             Brotisch
           </Typography>
           <Profile />
