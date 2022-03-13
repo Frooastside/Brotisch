@@ -7,6 +7,7 @@ const Content = () => {
 
   return (
     <Main drawerOpen={drawerOpen} drawerWidth={drawerWidth}>
+
     </Main>
   );
 };
