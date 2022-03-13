@@ -2,6 +2,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Content from './components/content/Content';
 import Header from './components/header/Header';
 import { selectTheme } from './redux/interfaceSlice';
 
@@ -40,6 +41,7 @@ const App = () => {
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <Header />
+      <Content />
     </ThemeProvider>
   );
 };
