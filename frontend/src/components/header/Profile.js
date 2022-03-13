@@ -19,17 +19,13 @@ const Profile = () => {
     setAnchor(null);
   };
 
-  const logout = () => {
-    window.location.href = `${process.env.REACT_APP_BACKEND}/logout`;
-  };
-
   return (
     <>
       {profile === undefined
         ? <CircularProgress />
         : <>
           {profile === null
-            ? <Button href={`${process.env.REACT_APP_BACKEND}/authenticate`}>Login</Button>
+            ? <Button component="a" href={`${process.env.REACT_APP_BACKEND}/authenticate`}>Login</Button>
             : <>
               {profile.avatar
                 ?
@@ -57,7 +53,7 @@ const Profile = () => {
                 open={anchor !== null}
                 sx={{ marginTop: '.5em' }}
               >
-                <MenuItem onClick={logout}>
+                <MenuItem button component="a" href={`${process.env.REACT_APP_BACKEND}/logout`}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>

@@ -1,8 +1,11 @@
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Divider, Drawer, IconButton, styled, useTheme } from '@mui/material';
+import {
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon, LibraryBooks as LibraryBooksIcon
+} from '@mui/icons-material';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, styled, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleDrawer } from '../../redux/interfaceSlice';
+import LinkBehavior from '../LinkBehavior';
 
 const Navigator = () => {
   const drawerOpen = useSelector(state => state.interface.drawerOpen);
@@ -29,6 +32,14 @@ const Navigator = () => {
         </IconButton>
       </DrawerHeader>
       <Divider />
+      <List>
+        <ListItem button component={LinkBehavior} href="/grammar">
+          <ListItemIcon>
+            <LibraryBooksIcon />
+          </ListItemIcon>
+          <ListItemText primary="Grammar" />
+        </ListItem>
+      </List>
     </Drawer>
   );
 };

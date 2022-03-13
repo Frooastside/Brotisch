@@ -1,21 +1,47 @@
+import { Box } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Content from './components/content/Content';
 import Header from './components/header/Header';
+import LinkBehavior from './components/LinkBehavior';
 import { selectTheme } from './redux/interfaceSlice';
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  components: {
+    MuiLink: {
+      defaultProps: {
+        LinkComponent: LinkBehavior
+      }
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior
+      }
+    }
+  }
 });
 
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
   },
+  components: {
+    MuiLink: {
+      defaultProps: {
+        LinkComponent: LinkBehavior
+      }
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior
+      }
+    }
+  }
 });
 
 const App = () => {
@@ -39,9 +65,11 @@ const App = () => {
 
   return (
     <ThemeProvider theme={muiTheme}>
-      <CssBaseline />
-      <Header />
-      <Content />
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <Header />
+        <Content />
+      </Box>
     </ThemeProvider>
   );
 };

@@ -1,5 +1,9 @@
-import { styled } from '@mui/material';
+import { CircularProgress, styled } from '@mui/material';
+import { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
+
+const Grammer = lazy(() => import('./Grammar'));
 
 const Content = () => {
   const drawerOpen = useSelector(state => state.interface.drawerOpen);
@@ -7,7 +11,14 @@ const Content = () => {
 
   return (
     <Main drawerOpen={drawerOpen} drawerWidth={drawerWidth}>
-
+      <HeaderSpacer />
+      <Routes>
+        <Route element={
+          <Suspense fallback={<CircularProgress sx={{ margin: 20 }} />}>
+            <Grammer />
+          </Suspense>
+        } path="/" />
+      </Routes>
     </Main>
   );
 };
@@ -30,5 +41,13 @@ const Main = styled('main', { shouldForwardProp: (prop) => (prop !== 'drawerOpen
     }),
   }),
 );
+
+const HeaderSpacer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-end'
+}));
 
 export default Content;
