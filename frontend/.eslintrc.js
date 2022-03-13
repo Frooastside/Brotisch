@@ -20,6 +20,7 @@ module.exports = {
     'react'
   ],
   'rules': {
+    'react/jsx-sort-props': 'error',
     'require-jsdoc': 0,
     'indent': [
       'error',

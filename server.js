@@ -49,6 +49,12 @@ app.use('/authenticate', authenticate);
 app.use('/api', api);
 app.use('/webhooks', webhooks);
 
+app.all('/logout',
+  (req, res) => {
+    req.logout();
+    res.redirect(process.env.REACT_APP ? process.env.REACT_APP : '/');
+  });
+
 app.use(express.static(path.join(__dirname, '/frontend/build/')));
 
 app.get('*', (req, res) => {
