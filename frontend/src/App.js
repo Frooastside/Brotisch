@@ -7,6 +7,7 @@ import Content from './components/content/Content';
 import Header from './components/header/Header';
 import LinkBehavior from './components/LinkBehavior';
 import { selectTheme } from './redux/interfaceSlice';
+import './api/firebase';
 
 const darkTheme = createTheme({
   palette: {

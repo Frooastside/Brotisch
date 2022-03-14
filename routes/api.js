@@ -4,6 +4,8 @@ const express = require('express');
 
 const { fetchProfile } = require('../database');
 
+require('../firebase');
+
 const router = express.Router();
 
 router.all('/',  (req, res) => {
