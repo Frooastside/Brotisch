@@ -52,8 +52,12 @@ app.use('/webhooks', webhooks);
 app.all('/logout',
   (req, res) => {
     req.logout();
-    res.redirect(process.env.REACT_APP ? process.env.REACT_APP : '/');
+    res.redirect(process.env.REACT_APP ?? '/');
   });
+
+app.all('/redirect/profile', (req, res) => {
+  res.redirect(process.env.ACCOUNT_URL ?? 'https://wolkeneis.dev/redirect/profile');
+});
 
 app.use(express.static(path.join(__dirname, '/frontend/build/')));
 

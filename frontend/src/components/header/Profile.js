@@ -1,5 +1,5 @@
-import { Logout } from '@mui/icons-material';
-import { Avatar, Button, CircularProgress, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import { Logout, OpenInNew } from '@mui/icons-material';
+import { Avatar, Button, CircularProgress, Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSelfProfile } from '../../api/profile';
@@ -56,11 +56,18 @@ const Profile = () => {
                 open={anchor !== null}
                 sx={{ marginTop: '.5em' }}
               >
+                <MenuItem component="a" href={`${process.env.REACT_APP_BACKEND}/redirect/profile`}>
+                  <ListItemIcon>
+                    <OpenInNew fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Account" />
+                </MenuItem>
+                <Divider />
                 <MenuItem component="a" href={`${process.env.REACT_APP_BACKEND}/logout`}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>
-                  Logout
+                  <ListItemText primary="Logout" />
                 </MenuItem>
               </Menu>
             </>
