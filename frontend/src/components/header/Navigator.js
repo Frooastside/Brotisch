@@ -1,6 +1,6 @@
 import {
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon, LibraryBooks as LibraryBooksIcon
+  Abc as AlphabetIcon, Assignment as ActionsIcon, Book as DictionaryIcon, ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon, LibraryBooks as GrammarIcon, Translate as TranslatorIcon, Timeline as ContributionsIcon
 } from '@mui/icons-material';
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, styled, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,11 +33,42 @@ const Navigator = () => {
       </DrawerHeader>
       <Divider />
       <List>
+        <ListItem button component={LinkBehavior} href="/alphabet">
+          <ListItemIcon>
+            <AlphabetIcon />
+          </ListItemIcon>
+          <ListItemText primary="Alphabet" />
+        </ListItem>
         <ListItem button component={LinkBehavior} href="/grammar">
           <ListItemIcon>
-            <LibraryBooksIcon />
+            <GrammarIcon />
           </ListItemIcon>
           <ListItemText primary="Grammar" />
+        </ListItem>
+        <ListItem button component={LinkBehavior} href="/dictionary">
+          <ListItemIcon>
+            <DictionaryIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dictionary" />
+        </ListItem>
+        <ListItem button component={LinkBehavior} href="/translate">
+          <ListItemIcon>
+            <TranslatorIcon />
+          </ListItemIcon>
+          <ListItemText primary="Translator" />
+        </ListItem>
+        <Divider />
+        <ListItem button component={LinkBehavior} href="/actions">
+          <ListItemIcon>
+            <ActionsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Your Actions" />
+        </ListItem>
+        <ListItem button component={LinkBehavior} href="/contributions">
+          <ListItemIcon>
+            <ContributionsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Your Contributions" />
         </ListItem>
       </List>
     </Drawer>
