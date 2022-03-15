@@ -1,5 +1,5 @@
 function fetchSelfProfile() {
-  return fetch(new Request(`${process.env.REACT_APP_BACKEND}/api/user/profile`, {
+  return fetch(new Request(`${process.env.REACT_APP_BACKEND}/api/profile`, {
     method: 'POST',
     credentials: 'include'
   }))
