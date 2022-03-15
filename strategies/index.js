@@ -3,14 +3,14 @@
 const passport = require('passport'),
   WolkeneisStrategy = require('passport-wolkeneis').Strategy;
 
-const database = require('../database');
+const {fetchProfile, patchProfile} = require('../database');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser((userId, done) => {
-  done(null, database.fetchProfile(userId));
+  fetchProfile(userId).then((profile) => done(null, profile));
 });
 
 
@@ -22,6 +22,5 @@ passport.use(new WolkeneisStrategy({
   callbackURL: process.env.CALLBACK_URL,
   userProfileURL: process.env.PROFILE_URL
 }, (accessToken, refreshToken, profile, done) => {
-  database.patchProfile(profile);
-  done(null, profile);
+  patchProfile(profile).then(() => done(null, profile));
 }));

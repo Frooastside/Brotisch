@@ -56,7 +56,7 @@ const Profile = () => {
                 open={anchor !== null}
                 sx={{ marginTop: '.5em' }}
               >
-                <MenuItem button component="a" href={`${process.env.REACT_APP_BACKEND}/logout`}>
+                <MenuItem component="a" href={`${process.env.REACT_APP_BACKEND}/logout`}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>

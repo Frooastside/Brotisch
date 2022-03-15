@@ -2,10 +2,6 @@
 
 const express = require('express');
 
-const { fetchProfile } = require('../database');
-
-require('../firebase');
-
 const router = express.Router();
 
 router.all('/',  (req, res) => {
@@ -13,28 +9,11 @@ router.all('/',  (req, res) => {
 });
 
 router.post('/user/profile', ensureLoggedIn, (req, res) => {
-  const profile = fetchProfile(req.user.id);
-  if(!profile) {
-    return res.sendStatus(500);
-  }
   res.json({
-    id: profile.id,
-    username: profile.username,
-    avatar: profile.avatar,
-    scopes: profile.scopes
-  });
-});
-
-router.post('/user/:userId/profile', ensureLoggedIn, (req, res) => {
-  const profile = fetchProfile(req.params.userId);
-  if (!profile) {
-    return res.sendStatus(400);
-  }
-  res.json({
-    id: profile.id,
-    username: profile.username,
-    avatar: profile.avatar,
-    scopes: profile.scopes
+    id: req.user.id,
+    username: req.user.username,
+    avatar: req.user.avatar,
+    scopes: req.user.scopes
   });
 });
 
