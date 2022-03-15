@@ -1,14 +1,17 @@
 import { Logout } from '@mui/icons-material';
 import { Avatar, Button, CircularProgress, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { fetchSelfProfile } from '../../api/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSelfProfile } from '../../api/profile';
+import { setProfile } from '../../redux/socialSlice';
 
 const Profile = () => {
-  const [profile, setProfile] = useState();
   const [anchor, setAnchor] = useState(null);
+  const profile = useSelector(state => state.social.profile);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchSelfProfile().then(setProfile);
+    fetchSelfProfile().then((profile) => dispatch(setProfile(profile)));
   }, []);
 
   const handleClick = (event) => {

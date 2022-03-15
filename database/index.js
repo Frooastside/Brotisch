@@ -7,6 +7,7 @@ const database = new JsonDB(new Config('profiles.json', true, true, '/'));
 
 
 function patchProfile(profile) {
+  profile['fetchedAt'] = profile['fetchedAt']?.toISOString();
   if (!database.exists('/profiles/' + profile.id)) {
     profile.scopes = [process.env.DEFAULT_SCOPE ?? 'default'];
   }
