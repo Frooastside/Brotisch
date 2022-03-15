@@ -1,8 +1,8 @@
 import {
   Abc as AlphabetIcon, Assignment as ActionsIcon, Book as DictionaryIcon, ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon, LibraryBooks as GrammarIcon, Translate as TranslatorIcon, Timeline as ContributionsIcon
+  ChevronRight as ChevronRightIcon, LibraryBooks as GrammarIcon, Timeline as ContributionsIcon, Translate as TranslatorIcon
 } from '@mui/icons-material';
-import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, styled, useTheme } from '@mui/material';
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, styled, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleDrawer } from '../../redux/interfaceSlice';
 import LinkBehavior from '../LinkBehavior';
@@ -71,6 +71,14 @@ const Navigator = () => {
           <ListItemText primary="Your Contributions" />
         </ListItem>
       </List>
+      <Typography sx={{
+        marginBottom: '1em',
+        marginTop: 'auto',
+        textAlign: 'center'
+      }} variant="caption">
+        Frooastside, Copyright © 2022<br />
+        Brotisch Version 0.1.0
+      </Typography>
     </Drawer>
   );
 };
