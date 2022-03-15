@@ -33,6 +33,10 @@ async function fetchProfile(userId) {
   return (await profiles.child(userId).get()).val();
 }
 
+async function profileExists(userId) {
+  return !isEmptyObject((await profiles.child(`${userId}/scopes`).get()).val());
+}
+
 async function fetchScopes(userId) {
   return (await profiles.child(`${userId}/scopes`).get()).val();
 }
@@ -55,7 +59,10 @@ async function createEntry(type, translations, content, author, taggedUsers) {
     type: type,
     translations: translations
   });
-  return await createPutAction(entry.key, content, author, taggedUsers);
+  return {
+    entryId: entry.key,
+    actionId: await createPutAction(entry.key, content, author, taggedUsers)
+  };
 }
 
 async function deleteEntry(entryId) {
@@ -108,8 +115,12 @@ async function deleteAction(actionId) {
   return await actions.child(actionId).remove();
 }
 
+async function fetchAction(actionId) {
+  return (await actions.child(actionId).get()).val();
+}
+
 async function actionExists(actionId) {
-  return !isEmptyObject((await actions.child(actionId).get()).val());
+  return !isEmptyObject(fetchAction(actionId));
 }
 
 async function approveAction(actionId) {
@@ -129,16 +140,27 @@ async function approveAction(actionId) {
       await dictionary.child(`${values.entryId}/contributors`).update(authorReference);
 
       await profiles.child(`${values.author}/contributions`).push().set(values.entryId);
-
-    } else {
-      await deleteEntry(values.entryId);
-    }
-
-    const taggedUsers = values.taggedUsers;
-    if (taggedUsers) {
-      for (const taggedUser of taggedUsers) {
-        await profiles.child(`${taggedUser}/actions/${action}`).remove();
+      const taggedUsers = values.taggedUsers;
+      if (taggedUsers) {
+        for (const taggedUser of taggedUsers) {
+          await profiles.child(`${taggedUser}/actions/${action}`).remove();
+        }
       }
+    } else {
+      const actions = (await dictionary.child(`${values.entryId}/actions`).get()).val();
+      for (const actionId in actions) {
+        if (Object.hasOwnProperty.call(actions, actionId)) {
+          const action = (await actions.child(actionId).get()).val();
+          const taggedUsers = action.taggedUsers;
+          if (taggedUsers) {
+            for (const taggedUser of taggedUsers) {
+              await profiles.child(`${taggedUser}/actions/${actionId}`).remove();
+            }
+          }
+        }
+      }
+
+      await deleteEntry(values.entryId);
     }
   }).catch(console.error);
 }
@@ -171,7 +193,7 @@ function isEmptyObject(object) {
 }
 
 module.exports = {
-  patchProfile, fetchProfile, fetchScopes, checkScope, addScope,
+  patchProfile, fetchProfile, profileExists, fetchScopes, checkScope, addScope,
   createEntry, entryExists,
-  createModifyAction, createDeleteAction, actionExists, approveAction, rejectAction
+  createModifyAction, createDeleteAction, fetchAction, actionExists, approveAction, rejectAction
 };
