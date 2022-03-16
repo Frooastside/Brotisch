@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export const interfaceSlice = createSlice({
-  name: 'interface',
+  name: "interface",
   initialState: {
-    theme: 'dark-theme',
+    theme: "dark-theme",
     drawerOpen: false,
     drawerWidth: 240
   },
@@ -12,7 +12,7 @@ export const interfaceSlice = createSlice({
       state.theme = action.payload;
     },
     toggleTheme: (state) => {
-      state.theme = state.theme === 'dark-theme' ? 'light-theme' : 'dark-theme';
+      state.theme = state.theme === "dark-theme" ? "light-theme" : "dark-theme";
     },
 
     setDrawerOpen: (state, action) => {
@@ -28,6 +28,7 @@ export const interfaceSlice = createSlice({
 });
 
 export const { selectTheme, toggleTheme } = interfaceSlice.actions;
-export const { setDrawerOpen, toggleDrawer, setDrawerWidth } = interfaceSlice.actions;
+export const { setDrawerOpen, toggleDrawer, setDrawerWidth } =
+  interfaceSlice.actions;
 
 export default interfaceSlice.reducer;

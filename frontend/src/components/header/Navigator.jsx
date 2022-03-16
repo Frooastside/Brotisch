@@ -1,15 +1,32 @@
 import {
-  Abc as AlphabetIcon, Assignment as ActionsIcon, Book as DictionaryIcon, ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon, LibraryBooks as GrammarIcon, Timeline as ContributionsIcon, Translate as TranslatorIcon
-} from '@mui/icons-material';
-import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, styled, Typography, useTheme } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleDrawer } from '../../redux/interfaceSlice';
-import LinkBehavior from '../LinkBehavior';
+  Abc as AlphabetIcon,
+  Assignment as ActionsIcon,
+  Book as DictionaryIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  LibraryBooks as GrammarIcon,
+  Timeline as ContributionsIcon,
+  Translate as TranslatorIcon
+} from "@mui/icons-material";
+import {
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  styled,
+  Typography,
+  useTheme
+} from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDrawer } from "../../redux/interfaceSlice";
+import LinkBehavior from "../LinkBehavior";
 
 const Navigator = () => {
-  const drawerOpen = useSelector(state => state.interface.drawerOpen);
-  const drawerWidth = useSelector(state => state.interface.drawerWidth);
+  const drawerOpen = useSelector((state) => state.interface.drawerOpen);
+  const drawerWidth = useSelector((state) => state.interface.drawerWidth);
   const dispatch = useDispatch();
   const theme = useTheme();
 
@@ -20,15 +37,20 @@ const Navigator = () => {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        '& .MuiDrawer-paper': {
+        "& .MuiDrawer-paper": {
           width: drawerWidth,
-          boxSizing: 'border-box',
+          boxSizing: "border-box"
         }
       }}
-      variant="persistent">
+      variant="persistent"
+    >
       <DrawerHeader>
         <IconButton onClick={() => dispatch(toggleDrawer())}>
-          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          {theme.direction === "ltr" ? (
+            <ChevronLeftIcon />
+          ) : (
+            <ChevronRightIcon />
+          )}
         </IconButton>
       </DrawerHeader>
       <Divider />
@@ -71,24 +93,28 @@ const Navigator = () => {
           <ListItemText primary="Your Contributions" />
         </ListItem>
       </List>
-      <Typography sx={{
-        marginBottom: '1em',
-        marginTop: 'auto',
-        textAlign: 'center'
-      }} variant="caption">
-        Frooastside, Copyright © 2022<br />
+      <Typography
+        sx={{
+          marginBottom: "1em",
+          marginTop: "auto",
+          textAlign: "center"
+        }}
+        variant="caption"
+      >
+        Frooastside, Copyright © 2022
+        <br />
         Brotisch Version 0.1.0
       </Typography>
     </Drawer>
   );
 };
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
-  justifyContent: 'flex-end'
+  justifyContent: "flex-end"
 }));
 
 export default Navigator;

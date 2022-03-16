@@ -1,25 +1,36 @@
-'use strict';
+"use strict";
 
-const express = require('express'),
-  fetch = require('node-fetch');
-const { checkScope, createDeleteAction, profileExists, createEntry, createModifyAction, entryExists, fetchAction, actionExists, approveAction, rejectAction } = require('../database');
+const express = require("express"),
+  fetch = require("node-fetch");
+const {
+  checkScope,
+  createDeleteAction,
+  profileExists,
+  createEntry,
+  createModifyAction,
+  entryExists,
+  fetchAction,
+  actionExists,
+  approveAction,
+  rejectAction
+} = require("../database");
 
 const router = express.Router();
 const profileRouter = express.Router();
 const actionsRouter = express.Router();
 const wordsRouter = express.Router();
 
-router.all('/', (req, res) => {
+router.all("/", (req, res) => {
   res.sendStatus(204);
 });
 
-router.use('/profile', profileRouter);
-router.use('/actions', actionsRouter);
-router.use('/words', wordsRouter);
+router.use("/profile", profileRouter);
+router.use("/actions", actionsRouter);
+router.use("/words", wordsRouter);
 
 profileRouter.use(ensureLoggedIn);
 
-profileRouter.post('/', (req, res) => {
+profileRouter.post("/", (req, res) => {
   res.json({
     id: req.user.id,
     username: req.user.username,
@@ -31,44 +42,66 @@ profileRouter.post('/', (req, res) => {
 actionsRouter.use(ensureLoggedIn);
 actionsRouter.use(ensureBread);
 
-actionsRouter.post('/create/:type', async (req, res) => {
+actionsRouter.post("/create/:type", async (req, res) => {
   const taggedUsers = await parseTaggedUsers(req.body.taggedUsers);
   switch (req.params.type) {
-  case 'put':
-    if (!req.body.type || !req.body.translations || !req.body.content) {
+    case "put":
+      if (!req.body.type || !req.body.translations || !req.body.content) {
+        res.sendStatus(400);
+      }
+      res.json(
+        await createEntry(
+          req.body.type,
+          req.body.translations,
+          req.body.content,
+          req.user.id,
+          taggedUsers
+        )
+      );
+      break;
+    case "modify":
+      if (
+        !req.body.entryId ||
+        !entryExists(req.body.entryId) ||
+        !req.body.content
+      ) {
+        res.sendStatus(400);
+      }
+      res.json({
+        actionId: await createModifyAction(
+          req.body.entryId,
+          req.body.content,
+          req.user.id,
+          taggedUsers
+        )
+      });
+      break;
+    case "delete":
+      if (!req.body.entryId || !entryExists(req.body.entryId)) {
+        res.sendStatus(400);
+      }
+      res.json({
+        actionId: await createDeleteAction(
+          req.body.entryId,
+          req.user.id,
+          taggedUsers
+        )
+      });
+      break;
+    default:
       res.sendStatus(400);
-    }
-    res.json(
-      await createEntry(req.body.type, req.body.translations, req.body.content, req.user.id, taggedUsers)
-    );
-    break;
-  case 'modify':
-    if (!req.body.entryId || !entryExists(req.body.entryId) || !req.body.content) {
-      res.sendStatus(400);
-    }
-    res.json({
-      actionId: await createModifyAction(req.body.entryId, req.body.content, req.user.id, taggedUsers)
-    });
-    break;
-  case 'delete':
-    if (!req.body.entryId || !entryExists(req.body.entryId)) {
-      res.sendStatus(400);
-    }
-    res.json({
-      actionId: await createDeleteAction(req.body.entryId, req.user.id, taggedUsers)
-    });
-    break;
-  default:
-    res.sendStatus(400);
-    break;
+      break;
   }
 });
 
-actionsRouter.post('/approve', async (req, res) => {
+actionsRouter.post("/approve", async (req, res) => {
   if (!req.body.actionId || !actionExists(req.body.actionId)) {
     res.sendStatus(400);
   }
-  if (req.user.id !== await fetchAction(req.body.actionId).author || await checkScope(req.user.id, process.env.DEFAULT_SCOPE ?? 'admin-bread')) {
+  if (
+    req.user.id !== (await fetchAction(req.body.actionId).author) ||
+    (await checkScope(req.user.id, process.env.DEFAULT_SCOPE ?? "admin-bread"))
+  ) {
     await approveAction(req.body.actionId);
     return res.sendStatus(204);
   } else {
@@ -76,11 +109,14 @@ actionsRouter.post('/approve', async (req, res) => {
   }
 });
 
-actionsRouter.post('/reject', async (req, res) => {
+actionsRouter.post("/reject", async (req, res) => {
   if (!req.body.actionId || !actionExists(req.body.actionId)) {
     res.sendStatus(400);
   }
-  if (req.user.id === await fetchAction(req.body.actionId).author || await checkScope(req.user.id, process.env.DEFAULT_SCOPE ?? 'admin-bread')) {
+  if (
+    req.user.id === (await fetchAction(req.body.actionId).author) ||
+    (await checkScope(req.user.id, process.env.DEFAULT_SCOPE ?? "admin-bread"))
+  ) {
     await rejectAction(req.body.actionId);
     return res.sendStatus(204);
   } else {
@@ -101,19 +137,22 @@ async function parseTaggedUsers(unsafeTaggedUsers) {
 wordsRouter.use(ensureLoggedIn);
 wordsRouter.use(ensureBread);
 
-wordsRouter.post('/translate', (req, res) => {
+wordsRouter.post("/translate", (req, res) => {
   return res.sendStatus(404);
 });
 
-wordsRouter.post('/definitions/:word', (req, res) => {
+wordsRouter.post("/definitions/:word", (req, res) => {
   if (!req.params.word) {
     return res.sendStatus(400);
   }
-  fetch(`https://dictionaryapi.com/api/v3/references/sd2/json/${req.params.word}?key=${process.env.WORD_API_KEY ?? ''}`)
+  fetch(
+    `https://dictionaryapi.com/api/v3/references/sd2/json/${
+      req.params.word
+    }?key=${process.env.WORD_API_KEY ?? ""}`
+  )
     .then((response) => response.json())
     .then((definition) => res.json(definition))
     .catch(() => res.sendStatus(500));
-
 });
 
 function ensureLoggedIn(req, res, next) {
@@ -125,13 +164,15 @@ function ensureLoggedIn(req, res, next) {
 }
 
 function ensureBread(req, res, next) {
-  checkScope(req.user.id, process.env.DEFAULT_SCOPE ?? 'normal-bread').then((bread) => {
-    if (bread) {
-      return next();
-    } else {
-      return res.sendStatus(403);
+  checkScope(req.user.id, process.env.DEFAULT_SCOPE ?? "normal-bread").then(
+    (bread) => {
+      if (bread) {
+        return next();
+      } else {
+        return res.sendStatus(403);
+      }
     }
-  });
+  );
 }
 
 module.exports = router;

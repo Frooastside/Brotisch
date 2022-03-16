@@ -1,30 +1,31 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import { styled } from '@mui/material';
-import MuiAppBar from '@mui/material/AppBar';
-import IconButton from '@mui/material/IconButton';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import Books from '../../media/books.svg';
-import { toggleDrawer } from '../../redux/interfaceSlice';
-import Navigator from './Navigator';
-import Profile from './Profile';
+import MenuIcon from "@mui/icons-material/Menu";
+import { styled } from "@mui/material";
+import MuiAppBar from "@mui/material/AppBar";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Books from "../../media/books.svg";
+import { toggleDrawer } from "../../redux/interfaceSlice";
+import Navigator from "./Navigator";
+import Profile from "./Profile";
 
 const Header = () => {
-  const drawerOpen = useSelector(state => state.interface.drawerOpen);
-  const drawerWidth = useSelector(state => state.interface.drawerWidth);
+  const drawerOpen = useSelector((state) => state.interface.drawerOpen);
+  const drawerWidth = useSelector((state) => state.interface.drawerWidth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const navigateHome = () => navigate('/');
+  const navigateHome = () => navigate("/");
 
   return (
     <>
       <AppBar
         drawerOpen={drawerOpen}
         drawerWidth={drawerWidth}
-        position="fixed">
+        position="fixed"
+      >
         <Toolbar>
           <IconButton
             aria-label="menu"
@@ -32,7 +33,8 @@ const Header = () => {
             edge="start"
             onClick={() => dispatch(toggleDrawer())}
             size="large"
-            sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}>
+            sx={{ mr: 2, ...(drawerOpen && { display: "none" }) }}
+          >
             <MenuIcon />
           </IconButton>
           <img
@@ -41,14 +43,20 @@ const Header = () => {
             onClick={navigateHome}
             src={Books}
             style={{
-              cursor: 'pointer',
-              marginRight: '.5em'
+              cursor: "pointer",
+              marginRight: ".5em"
             }}
-            width={40} />
-          <Typography component="div" onClick={navigateHome} sx={{
-            cursor: 'pointer',
-            flexGrow: 1
-          }} variant="h6">
+            width={40}
+          />
+          <Typography
+            component="div"
+            onClick={navigateHome}
+            sx={{
+              cursor: "pointer",
+              flexGrow: 1
+            }}
+            variant="h6"
+          >
             Brotisch
           </Typography>
           <Profile />
@@ -60,20 +68,20 @@ const Header = () => {
 };
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => (prop !== 'drawerOpen' && prop !== 'drawerWidth'),
+  shouldForwardProp: (prop) => prop !== "drawerOpen" && prop !== "drawerWidth"
 })(({ theme, drawerOpen, drawerWidth }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
+  transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
+    duration: theme.transitions.duration.leavingScreen
   }),
   ...(drawerOpen && {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
+      duration: theme.transitions.duration.enteringScreen
+    })
+  })
 }));
 
 export default Header;

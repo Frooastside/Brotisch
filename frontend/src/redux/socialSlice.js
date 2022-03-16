@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export const socialSlice = createSlice({
-  name: 'social',
+  name: "social",
   initialState: {
-    profile: undefined,
+    profile: undefined
   },
   reducers: {
     setProfile: (state, action) => {

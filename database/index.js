@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const admin = require('firebase-admin');
+const admin = require("firebase-admin");
 
-const serviceAccount = require('../security/firebase.json');
+const serviceAccount = require("../security/firebase.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -11,12 +11,12 @@ admin.initializeApp({
 
 const db = admin.database();
 
-const profiles = db.ref('profiles');
-const dictionary = db.ref('dictionary');
-const actions = db.ref('actions');
+const profiles = db.ref("profiles");
+const dictionary = db.ref("dictionary");
+const actions = db.ref("actions");
 
 async function patchProfile(profile) {
-  profile['fetchedAt'] = profile['fetchedAt']?.toISOString();
+  profile["fetchedAt"] = profile["fetchedAt"]?.toISOString();
   await profiles.child(profile.id).update({
     id: profile.id,
     username: profile.username,
@@ -24,7 +24,7 @@ async function patchProfile(profile) {
   });
   if (isEmptyObject(await fetchScopes(profile.id))) {
     await profiles.child(profile.id).update({
-      scopes: [process.env.DEFAULT_SCOPE ?? 'default']
+      scopes: [process.env.DEFAULT_SCOPE ?? "default"]
     });
   }
 }
@@ -47,10 +47,7 @@ async function checkScope(userId, scope) {
 
 async function addScope(userId, scope) {
   const scopes = await fetchScopes();
-  await profiles.child(`${userId}/scopes`).update([
-    ...scopes,
-    scope
-  ]);
+  await profiles.child(`${userId}/scopes`).update([...scopes, scope]);
 }
 
 async function createEntry(type, translations, content, author, taggedUsers) {
@@ -74,15 +71,15 @@ async function entryExists(entryId) {
 }
 
 async function createPutAction(entryId, content, author, taggedUsers) {
-  return await createAction('put', entryId, content, author, taggedUsers);
+  return await createAction("put", entryId, content, author, taggedUsers);
 }
 
 async function createModifyAction(entryId, content, author, taggedUsers) {
-  return await createAction('patch', entryId, content, author, taggedUsers);
+  return await createAction("patch", entryId, content, author, taggedUsers);
 }
 
 async function createDeleteAction(entryId, author, taggedUsers) {
-  return await createAction('delete', entryId, null, author, taggedUsers);
+  return await createAction("delete", entryId, null, author, taggedUsers);
 }
 
 async function createAction(type, entryId, content, author, taggedUsers) {
@@ -129,41 +126,54 @@ async function approveAction(actionId) {
     approved: true
   });
 
-  action.get().then(async (snapshot) => {
-    const values = snapshot.val();
+  action
+    .get()
+    .then(async (snapshot) => {
+      const values = snapshot.val();
 
-    if (values.type !== 'delete') {
-      const authorReference = {};
-      authorReference[values.author] = true;
+      if (values.type !== "delete") {
+        const authorReference = {};
+        authorReference[values.author] = true;
 
-      await dictionary.child(`${values.entryId}/content`).update(values.content);
-      await dictionary.child(`${values.entryId}/contributors`).update(authorReference);
+        await dictionary
+          .child(`${values.entryId}/content`)
+          .update(values.content);
+        await dictionary
+          .child(`${values.entryId}/contributors`)
+          .update(authorReference);
 
-      await profiles.child(`${values.author}/contributions`).push(values.entryId);
-      
-      const taggedUsers = values.taggedUsers;
-      if (taggedUsers) {
-        for (const taggedUser of taggedUsers) {
-          await profiles.child(`${taggedUser}/actions/${action}`).remove();
+        await profiles
+          .child(`${values.author}/contributions`)
+          .push(values.entryId);
+
+        const taggedUsers = values.taggedUsers;
+        if (taggedUsers) {
+          for (const taggedUser of taggedUsers) {
+            await profiles.child(`${taggedUser}/actions/${action}`).remove();
+          }
         }
-      }
-    } else {
-      const actions = (await dictionary.child(`${values.entryId}/actions`).get()).val();
-      for (const actionId in actions) {
-        if (Object.hasOwnProperty.call(actions, actionId)) {
-          const action = (await actions.child(actionId).get()).val();
-          const taggedUsers = action.taggedUsers;
-          if (taggedUsers) {
-            for (const taggedUser of taggedUsers) {
-              await profiles.child(`${taggedUser}/actions/${actionId}`).remove();
+      } else {
+        const actions = (
+          await dictionary.child(`${values.entryId}/actions`).get()
+        ).val();
+        for (const actionId in actions) {
+          if (Object.hasOwnProperty.call(actions, actionId)) {
+            const action = (await actions.child(actionId).get()).val();
+            const taggedUsers = action.taggedUsers;
+            if (taggedUsers) {
+              for (const taggedUser of taggedUsers) {
+                await profiles
+                  .child(`${taggedUser}/actions/${actionId}`)
+                  .remove();
+              }
             }
           }
         }
-      }
 
-      await deleteEntry(values.entryId);
-    }
-  }).catch(console.error);
+        await deleteEntry(values.entryId);
+      }
+    })
+    .catch(console.error);
 }
 
 async function rejectAction(actionId) {
@@ -172,21 +182,24 @@ async function rejectAction(actionId) {
     rejected: true
   });
 
-  action.get().then(async (snapshot) => {
-    const values = snapshot.val();
+  action
+    .get()
+    .then(async (snapshot) => {
+      const values = snapshot.val();
 
-    if (values.type === 'put') {
-      await deleteEntry(values.entryId);
-      await deleteAction(actionId);
-    }
-
-    const taggedUsers = values.taggedUsers;
-    if (taggedUsers) {
-      for (const taggedUser of taggedUsers) {
-        await profiles.child(`${taggedUser}/actions/${action}`).remove();
+      if (values.type === "put") {
+        await deleteEntry(values.entryId);
+        await deleteAction(actionId);
       }
-    }
-  }).catch(console.error);
+
+      const taggedUsers = values.taggedUsers;
+      if (taggedUsers) {
+        for (const taggedUser of taggedUsers) {
+          await profiles.child(`${taggedUser}/actions/${action}`).remove();
+        }
+      }
+    })
+    .catch(console.error);
 }
 
 function isEmptyObject(object) {
@@ -194,7 +207,18 @@ function isEmptyObject(object) {
 }
 
 module.exports = {
-  patchProfile, fetchProfile, profileExists, fetchScopes, checkScope, addScope,
-  createEntry, entryExists,
-  createModifyAction, createDeleteAction, fetchAction, actionExists, approveAction, rejectAction
+  patchProfile,
+  fetchProfile,
+  profileExists,
+  fetchScopes,
+  checkScope,
+  addScope,
+  createEntry,
+  entryExists,
+  createModifyAction,
+  createDeleteAction,
+  fetchAction,
+  actionExists,
+  approveAction,
+  rejectAction
 };
