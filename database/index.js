@@ -42,7 +42,7 @@ async function fetchScopes(userId) {
 }
 
 async function checkScope(userId, scope) {
-  return await fetchScopes(userId).includes(scope);
+  return (await fetchScopes(userId)).includes(scope);
 }
 
 async function addScope(userId, scope) {
@@ -139,7 +139,8 @@ async function approveAction(actionId) {
       await dictionary.child(`${values.entryId}/content`).update(values.content);
       await dictionary.child(`${values.entryId}/contributors`).update(authorReference);
 
-      await profiles.child(`${values.author}/contributions`).push().set(values.entryId);
+      await profiles.child(`${values.author}/contributions`).push(values.entryId);
+      
       const taggedUsers = values.taggedUsers;
       if (taggedUsers) {
         for (const taggedUser of taggedUsers) {
