@@ -1,11 +1,13 @@
 'use strict';
 
-const express = require('express');
+const express = require('express'),
+  fetch = require('node-fetch');
 const { checkScope, createDeleteAction, profileExists, createEntry, createModifyAction, entryExists, fetchAction, actionExists, approveAction, rejectAction } = require('../database');
 
 const router = express.Router();
 const profileRouter = express.Router();
 const actionsRouter = express.Router();
+const wordsRouter = express.Router();
 
 router.all('/', (req, res) => {
   res.sendStatus(200);
@@ -13,6 +15,7 @@ router.all('/', (req, res) => {
 
 router.use('/profile', profileRouter);
 router.use('/actions', actionsRouter);
+router.use('/words', wordsRouter);
 
 profileRouter.use(ensureLoggedIn);
 
@@ -31,33 +34,33 @@ actionsRouter.use(ensureBread);
 actionsRouter.post('/create/:type', async (req, res) => {
   const taggedUsers = await parseTaggedUsers(req.body.taggedUsers);
   switch (req.params.type) {
-  case 'put':
-    if (!req.body.type || !req.body.translations || !req.body.content) {
+    case 'put':
+      if (!req.body.type || !req.body.translations || !req.body.content) {
+        res.sendStatus(400);
+      }
+      res.json(
+        await createEntry(req.body.type, req.body.translations, req.body.content, req.user.id, taggedUsers)
+      );
+      break;
+    case 'modify':
+      if (!req.body.entryId || !entryExists(req.body.entryId) || !req.body.content) {
+        res.sendStatus(400);
+      }
+      res.json({
+        actionId: await createModifyAction(req.body.entryId, req.body.content, req.user.id, taggedUsers)
+      });
+      break;
+    case 'delete':
+      if (!req.body.entryId || !entryExists(req.body.entryId)) {
+        res.sendStatus(400);
+      }
+      res.json({
+        actionId: await createDeleteAction(req.body.entryId, req.user.id, taggedUsers)
+      });
+      break;
+    default:
       res.sendStatus(400);
-    }
-    res.json(
-      await createEntry(req.body.type, req.body.translations, req.body.content, req.user.id, taggedUsers)
-    );
-    break;
-  case 'modify':
-    if (!req.body.entryId || !entryExists(req.body.entryId) || !req.body.content) {
-      res.sendStatus(400);
-    }
-    res.json({
-      actionId: await createModifyAction(req.body.entryId, req.body.content, req.user.id, taggedUsers)
-    });
-    break;
-  case 'delete':
-    if (!req.body.entryId || !entryExists(req.body.entryId)) {
-      res.sendStatus(400);
-    }
-    res.json({
-      actionId: await createDeleteAction(req.body.entryId, req.user.id, taggedUsers)
-    });
-    break;
-  default:
-    res.sendStatus(400);
-    break;
+      break;
   }
 });
 
@@ -68,7 +71,7 @@ actionsRouter.post('/approve', async (req, res) => {
   if (req.user.id !== await fetchAction(req.body.actionId).author || await checkScope(req.user.id, process.env.DEFAULT_SCOPE ?? 'admin-bread')) {
     await approveAction(req.body.actionId);
     return res.sendStatus(204);
-  }else {
+  } else {
     return res.sendStatus(403);
   }
 });
@@ -94,6 +97,28 @@ async function parseTaggedUsers(unsafeTaggedUsers) {
   }
   return taggedUsers;
 }
+
+wordsRouter.use(ensureLoggedIn);
+wordsRouter.use(ensureBread);
+
+wordsRouter.all('/', (req, res) => {
+  return res.sendStatus(204);
+});
+
+wordsRouter.post('/translate', (req, res) => {
+  return res.sendStatus(404);
+});
+
+wordsRouter.post('/definitions/:word', (req, res) => {
+  if (!req.params.word) {
+    return res.sendStatus(400);
+  }
+  fetch(`https://dictionaryapi.com/api/v3/references/sd2/json/${req.params.word}?key=${process.env.WORD_API_KEY ?? ''}`)
+    .then((response) => response.json())
+    .then((json) => res.json(json))
+    .catch(() => res.sendStatus(500));
+
+});
 
 function ensureLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
