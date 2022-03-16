@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
 const Grammer = lazy(() => import('./Grammar'));
+const Dictionary = lazy(() => import('./Dictionary'));
+const NewEntry = lazy(() => import('./NewEntry'));
 
 const Content = () => {
   const drawerOpen = useSelector(state => state.interface.drawerOpen);
@@ -17,7 +19,21 @@ const Content = () => {
           <Suspense fallback={<CircularProgress sx={{ margin: 20 }} />}>
             <Grammer />
           </Suspense>
-        } path="/" />
+        } path="/grammar" />
+        <Route element={
+          <Routes>
+            <Route element={
+              <Suspense fallback={<CircularProgress sx={{ margin: 20 }} />}>
+                <Dictionary />
+              </Suspense>
+            } path="/*" />
+            <Route element={
+              <Suspense fallback={<CircularProgress sx={{ margin: 20 }} />}>
+                <NewEntry />
+              </Suspense>
+            } path="/new" />
+          </Routes>
+        } path="/dictionary/*" />
       </Routes>
     </Main>
   );

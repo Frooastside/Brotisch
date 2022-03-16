@@ -10,7 +10,7 @@ const actionsRouter = express.Router();
 const wordsRouter = express.Router();
 
 router.all('/', (req, res) => {
-  res.sendStatus(200);
+  res.sendStatus(204);
 });
 
 router.use('/profile', profileRouter);
@@ -34,33 +34,33 @@ actionsRouter.use(ensureBread);
 actionsRouter.post('/create/:type', async (req, res) => {
   const taggedUsers = await parseTaggedUsers(req.body.taggedUsers);
   switch (req.params.type) {
-    case 'put':
-      if (!req.body.type || !req.body.translations || !req.body.content) {
-        res.sendStatus(400);
-      }
-      res.json(
-        await createEntry(req.body.type, req.body.translations, req.body.content, req.user.id, taggedUsers)
-      );
-      break;
-    case 'modify':
-      if (!req.body.entryId || !entryExists(req.body.entryId) || !req.body.content) {
-        res.sendStatus(400);
-      }
-      res.json({
-        actionId: await createModifyAction(req.body.entryId, req.body.content, req.user.id, taggedUsers)
-      });
-      break;
-    case 'delete':
-      if (!req.body.entryId || !entryExists(req.body.entryId)) {
-        res.sendStatus(400);
-      }
-      res.json({
-        actionId: await createDeleteAction(req.body.entryId, req.user.id, taggedUsers)
-      });
-      break;
-    default:
+  case 'put':
+    if (!req.body.type || !req.body.translations || !req.body.content) {
       res.sendStatus(400);
-      break;
+    }
+    res.json(
+      await createEntry(req.body.type, req.body.translations, req.body.content, req.user.id, taggedUsers)
+    );
+    break;
+  case 'modify':
+    if (!req.body.entryId || !entryExists(req.body.entryId) || !req.body.content) {
+      res.sendStatus(400);
+    }
+    res.json({
+      actionId: await createModifyAction(req.body.entryId, req.body.content, req.user.id, taggedUsers)
+    });
+    break;
+  case 'delete':
+    if (!req.body.entryId || !entryExists(req.body.entryId)) {
+      res.sendStatus(400);
+    }
+    res.json({
+      actionId: await createDeleteAction(req.body.entryId, req.user.id, taggedUsers)
+    });
+    break;
+  default:
+    res.sendStatus(400);
+    break;
   }
 });
 
@@ -101,10 +101,6 @@ async function parseTaggedUsers(unsafeTaggedUsers) {
 wordsRouter.use(ensureLoggedIn);
 wordsRouter.use(ensureBread);
 
-wordsRouter.all('/', (req, res) => {
-  return res.sendStatus(204);
-});
-
 wordsRouter.post('/translate', (req, res) => {
   return res.sendStatus(404);
 });
@@ -115,7 +111,7 @@ wordsRouter.post('/definitions/:word', (req, res) => {
   }
   fetch(`https://dictionaryapi.com/api/v3/references/sd2/json/${req.params.word}?key=${process.env.WORD_API_KEY ?? ''}`)
     .then((response) => response.json())
-    .then((json) => res.json(json))
+    .then((definition) => res.json(definition))
     .catch(() => res.sendStatus(500));
 
 });

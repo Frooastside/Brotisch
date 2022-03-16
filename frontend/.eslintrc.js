@@ -21,6 +21,7 @@ module.exports = {
   ],
   'rules': {
     'react/jsx-sort-props': 'error',
+    'react/jsx-filename-extension': [1, { 'allow': 'as-needed' }],
     'require-jsdoc': 0,
     'indent': [
       'error',
