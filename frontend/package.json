@@ -35,8 +35,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .jsx",
-    "pretty": "prettier . --write"
+    "lint": "eslint . --ext .jsx"
   },
   "eslintConfig": {
     "extends": [
@@ -64,7 +63,6 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "prettier": "2.6.0"
+    "eslint-plugin-react-hooks": "^4.3.0"
   }
 }
