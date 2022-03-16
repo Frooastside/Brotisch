@@ -189,7 +189,7 @@ async function rejectAction(actionId) {
 }
 
 function isEmptyObject(object) {
-  return !Object.keys(object).length;
+  return !object || !Object.keys(object).length;
 }
 
 module.exports = {
