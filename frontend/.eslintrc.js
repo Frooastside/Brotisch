@@ -17,7 +17,6 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module"
   },
-  plugins: ["react"],
   rules: {
     "react/jsx-sort-props": "error",
     "react/jsx-filename-extension": [1, { allow: "as-needed" }],
