@@ -14,12 +14,12 @@ elif [ $LOCAL = $BASE ]; then
     git submodule sync
     git submodule update
     yarn
+    pm2 restart Brotisch
     (
         cd frontend
         yarn
         yarn build
     )
-    pm2 restart Brotisch
     echo "Updated succesfully"
 elif [ $REMOTE = $BASE ]; then
     echo "Need to push"
