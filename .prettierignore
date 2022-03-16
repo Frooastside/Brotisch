@@ -146,4 +146,21 @@ dist
 /sessions/
 /security/
 /profiles.json
-/frontend/
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/frontend/node_modules
+/frontend/.pnp
+.pnp.js
+
+# testing
+/frontend/coverage
+
+# production
+/frontend/build
+
+# misc
+.DS_Store
+
+/frontend/security
