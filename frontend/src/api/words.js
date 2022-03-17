@@ -1,5 +1,5 @@
 function fetchDefinition(word) {
-  fetch(
+  return fetch(
     new Request(
       `${process.env.REACT_APP_BACKEND}/api/words/definitions/${word}`,
       {

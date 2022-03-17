@@ -6,8 +6,6 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
     "prettier"
   ],
   parserOptions: {
@@ -18,8 +16,6 @@ module.exports = {
     sourceType: "module"
   },
   rules: {
-    "react/jsx-sort-props": "error",
-    "react/jsx-filename-extension": [1, { allow: "as-needed" }],
     "require-jsdoc": 0,
     quotes: ["error", "double"]
   }

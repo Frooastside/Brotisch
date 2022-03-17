@@ -17,7 +17,7 @@ const Content = () => {
       <Routes>
         <Route
           element={
-            <Suspense fallback={<CircularProgress sx={{ margin: 20 }} />}>
+            <Suspense fallback={<CircularProgress sx={{ m: 20 }} />}>
               <Grammer />
             </Suspense>
           }
@@ -28,7 +28,7 @@ const Content = () => {
             <Routes>
               <Route
                 element={
-                  <Suspense fallback={<CircularProgress sx={{ margin: 20 }} />}>
+                  <Suspense fallback={<CircularProgress sx={{ m: 20 }} />}>
                     <Dictionary />
                   </Suspense>
                 }
@@ -36,7 +36,7 @@ const Content = () => {
               />
               <Route
                 element={
-                  <Suspense fallback={<CircularProgress sx={{ margin: 20 }} />}>
+                  <Suspense fallback={<CircularProgress sx={{ m: 20 }} />}>
                     <NewEntry />
                   </Suspense>
                 }
