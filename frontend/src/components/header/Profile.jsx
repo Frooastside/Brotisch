@@ -71,7 +71,7 @@ const Profile = () => {
                 id="basic-menu"
                 onClose={handleClose}
                 open={anchor !== null}
-                sx={{ marginTop: ".5em" }}
+                sx={{ mt: ".5em" }}
               >
                 <MenuItem
                   component="a"

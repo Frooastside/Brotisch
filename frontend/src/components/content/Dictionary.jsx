@@ -1,7 +1,7 @@
-import { Typography } from "@mui/material";
+import { Button } from "@mui/material";
 
 const Dictionary = () => {
-  return <Typography paragraph>Text</Typography>;
+  return <Button href="/dictionary/new">New</Button>;
 };
 
 export default Dictionary;

@@ -17,13 +17,13 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-element);
+  background: #333333;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-higher-element);
+  background: #444444;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-element-hover);
+  background: #555555;
 }

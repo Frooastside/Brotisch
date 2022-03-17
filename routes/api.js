@@ -151,7 +151,21 @@ wordsRouter.post("/definitions/:word", (req, res) => {
     }?key=${process.env.WORD_API_KEY ?? ""}`
   )
     .then((response) => response.json())
-    .then((definition) => res.json(definition))
+    .then((definitions) => {
+      if (!Array.isArray(definitions)) {
+        throw new Error();
+      }
+      return definitions.every((element) => typeof element === "string")
+        ? definitions
+        : definitions.map((definition) => ({
+            uuid: definition.meta.uuid,
+            type: definition.fl,
+            headword: definition.meta.id.split(":")[0],
+            offensive: definition.meta.offensive,
+            shortdef: definition.shortdef
+          }));
+    })
+    .then((definitions) => res.json(definitions))
     .catch(() => res.sendStatus(500));
 });
 

@@ -95,8 +95,8 @@ const Navigator = () => {
       </List>
       <Typography
         sx={{
-          marginBottom: "1em",
-          marginTop: "auto",
+          mb: "1em",
+          mt: "auto",
           textAlign: "center"
         }}
         variant="caption"
