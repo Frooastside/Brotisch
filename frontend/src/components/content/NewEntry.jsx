@@ -1,6 +1,9 @@
 import {
+  Avatar,
   List,
+  ListItem,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
   Paper,
   TextField
@@ -14,8 +17,13 @@ import Typography from "@mui/material/Typography";
 import { PropTypes } from "prop-types";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDefinition } from "../../api/words";
-import { resetEntry, setSelectedWord } from "../../redux/dictionarySlice";
+import { fetchDefinitions, fetchTranslations, iconOf } from "../../api/words";
+import {
+  resetEntry,
+  setSelectedWord,
+  setTranslation,
+  setTranslations
+} from "../../redux/dictionarySlice";
 
 const steps = [
   "Select a word",
@@ -28,6 +36,7 @@ const NewEntry = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
   const selectedWord = useSelector((state) => state.dictionary.selectedWord);
+  const translation = useSelector((state) => state.dictionary.translation);
   const drawerOpen = useSelector((state) => state.interface.drawerOpen);
   const drawerWidth = useSelector((state) => state.interface.drawerWidth);
   const dispatch = useDispatch();
@@ -43,7 +52,10 @@ const NewEntry = () => {
     switch (step) {
       case 0:
         return selectedWord ? true : false;
-
+      case 1:
+        return translation ? true : false;
+      case 2:
+        return true;
       default:
         return false;
     }
@@ -59,7 +71,7 @@ const NewEntry = () => {
 
   const handleNext = () => {
     if (isStepSkipped(activeStep)) {
-      const newSkipped = new Set(newSkipped.values());
+      const newSkipped = new Set(skipped.values());
       newSkipped.delete(activeStep);
       setSkipped(newSkipped);
     }
@@ -160,6 +172,10 @@ const Content = ({ activeStep }) => {
   switch (activeStep) {
     case 0:
       return <WordSelector />;
+    case 1:
+      return <TranslationSelector />;
+    case 3:
+      return <SelfInspection />;
     default:
       return null;
   }
@@ -194,7 +210,7 @@ const WordSelector = () => {
     setRecommendations(null);
     setError(null);
     if (word) {
-      fetchDefinition(word)
+      fetchDefinitions(word)
         .then((result) => {
           if (!result) {
             return setError("An error occurred!");
@@ -245,7 +261,6 @@ const WordSelector = () => {
               : "An error occurred."
             : undefined
         }
-        id="standard-basic"
         label="Choose a word"
         onChange={onChange}
         value={rawWord}
@@ -287,6 +302,92 @@ const WordSelector = () => {
             ))}
           </List>
         )}
+      </Paper>
+    </Box>
+  );
+};
+
+const TranslationSelector = () => {
+  const translation = useSelector((state) => state.dictionary.translation);
+  const dispatch = useDispatch();
+
+  return (
+    <Box
+      sx={{
+        p: 5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+      }}
+    >
+      <Typography sx={{ margin: 1 }} variant="h4">
+        Choose a translation
+      </Typography>
+      <TextField
+        label="Choose a translation"
+        onChange={(event) => dispatch(setTranslation(event.target.value))}
+        value={translation}
+        variant="standard"
+      />
+    </Box>
+  );
+};
+
+const SelfInspection = () => {
+  const selectedWord = useSelector((state) => state.dictionary.selectedWord);
+  const translation = useSelector((state) => state.dictionary.translation);
+  const translations = useSelector((state) => state.dictionary.translations);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchTranslations(selectedWord.headword).then((translations) =>
+      dispatch(setTranslations(translations))
+    );
+  }, [selectedWord]);
+
+  useEffect(() => {
+    console.log(translations);
+  }, [translations]);
+
+  return (
+    <Box
+      sx={{
+        p: 5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+      }}
+    >
+      <Paper
+        sx={{
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center"
+        }}
+      >
+        <Typography sx={{ margin: 2 }} variant="h4">
+          Check if you made any mistakes
+        </Typography>
+        <Typography sx={{ mt: 2, mb: 0.5 }} variant="h5">
+          {translation}
+        </Typography>
+        <List>
+          <ListItem>
+            <ListItemIcon>
+              <Avatar src={iconOf("en")} />
+            </ListItemIcon>
+            <ListItemText primary={selectedWord.headword} />
+          </ListItem>
+          {Object.keys(translations).map((language) => (
+            <ListItem key={language}>
+              <ListItemIcon>
+                <Avatar src={iconOf(language)} />
+              </ListItemIcon>
+              <ListItemText primary={translations[language]} />
+            </ListItem>
+          ))}
+        </List>
       </Paper>
     </Box>
   );

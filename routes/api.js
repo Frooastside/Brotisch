@@ -137,9 +137,35 @@ async function parseTaggedUsers(unsafeTaggedUsers) {
 wordsRouter.use(ensureLoggedIn);
 wordsRouter.use(ensureBread);
 
-wordsRouter.post("/translate", (req, res) => {
-  return res.sendStatus(404);
+wordsRouter.post("/translate/:word", async (req, res) => {
+  if (!req.params.word) {
+    return res.sendStatus(400);
+  }
+  const word = req.params.word;
+  res.json({
+    de: await fetchTranslation("de", word),
+    nl: await fetchTranslation("nl", word),
+    fi: await fetchTranslation("fi", word)
+  });
 });
+
+async function fetchTranslation(target, word) {
+  return await fetch(
+    `https://translation.googleapis.com/language/translate/v2?source=en&q=${word}&target=${target}&key=${
+      process.env.GOOGLE_API_KEY ?? ""
+    }`,
+    {
+      method: "POST"
+    }
+  )
+    .then((response) => response.json())
+    .then((response) => response.data.translations)
+    .then((translations) =>
+      translations.map((translation) => translation.translatedText)
+    )
+    .then((translations) => translations[0])
+    .catch(() => null);
+}
 
 wordsRouter.post("/definitions/:word", (req, res) => {
   if (!req.params.word) {
