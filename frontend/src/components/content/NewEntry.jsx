@@ -17,6 +17,8 @@ import Typography from "@mui/material/Typography";
 import { PropTypes } from "prop-types";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { createPutAction } from "../../api/actions";
 import { fetchDefinitions, fetchTranslations, iconOf } from "../../api/words";
 import {
   resetEntry,
@@ -37,8 +39,10 @@ const NewEntry = () => {
   const [skipped, setSkipped] = useState(new Set());
   const selectedWord = useSelector((state) => state.dictionary.selectedWord);
   const translation = useSelector((state) => state.dictionary.translation);
+  const translations = useSelector((state) => state.dictionary.translations);
   const drawerOpen = useSelector((state) => state.interface.drawerOpen);
   const drawerWidth = useSelector((state) => state.interface.drawerWidth);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -56,6 +60,8 @@ const NewEntry = () => {
         return translation ? true : false;
       case 2:
         return true;
+      case 3:
+        return Object.keys(translations).length !== 0;
       default:
         return false;
     }
@@ -76,7 +82,13 @@ const NewEntry = () => {
       setSkipped(newSkipped);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep !== steps.length - 1) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    } else {
+      createPutAction(selectedWord.type, translations, translation)
+        .then((response) => navigate(`/actions/${response.actionId}`))
+        .catch(console.error);
+    }
   };
 
   const handleBack = () => {
@@ -341,13 +353,14 @@ const SelfInspection = () => {
 
   useEffect(() => {
     fetchTranslations(selectedWord.headword).then((translations) =>
-      dispatch(setTranslations(translations))
+      dispatch(
+        setTranslations({
+          en: selectedWord.headword,
+          ...translations
+        })
+      )
     );
   }, [selectedWord]);
-
-  useEffect(() => {
-    console.log(translations);
-  }, [translations]);
 
   return (
     <Box
@@ -373,12 +386,6 @@ const SelfInspection = () => {
           {translation}
         </Typography>
         <List>
-          <ListItem>
-            <ListItemIcon>
-              <Avatar src={iconOf("en")} />
-            </ListItemIcon>
-            <ListItemText primary={selectedWord.headword} />
-          </ListItem>
           {Object.keys(translations).map((language) => (
             <ListItem key={language}>
               <ListItemIcon>

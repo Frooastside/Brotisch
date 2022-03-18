@@ -126,7 +126,7 @@ actionsRouter.post("/reject", async (req, res) => {
 
 async function parseTaggedUsers(unsafeTaggedUsers) {
   const taggedUsers = [];
-  for (const taggedUser of unsafeTaggedUsers) {
+  for (const taggedUser of unsafeTaggedUsers ?? []) {
     if (await profileExists(taggedUser)) {
       taggedUsers.push(taggedUser);
     }
