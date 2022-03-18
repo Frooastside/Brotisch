@@ -13,12 +13,12 @@ elif [ $LOCAL = $BASE ]; then
     git pull
     git submodule sync
     git submodule update
-    yarn
+    pnpm i
     pm2 restart Brotisch
     (
         cd frontend
-        yarn
-        yarn build
+        pnpm i
+        pnpm build
     )
     echo "Updated succesfully"
 elif [ $REMOTE = $BASE ]; then
