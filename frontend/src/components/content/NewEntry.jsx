@@ -245,11 +245,11 @@ const WordSelector = () => {
               : "An error occured"
             : undefined
         }
-        onChange={onChange}
         id="standard-basic"
         label="Choose a word"
-        variant="standard"
+        onChange={onChange}
         value={rawWord}
+        variant="standard"
       />
       <Paper sx={{ m: "2rem" }}>
         {recommendations && (
@@ -268,9 +268,9 @@ const WordSelector = () => {
           <List sx={{ maxWidth: 500, p: "1rem" }}>
             {definitions.map((definition) => (
               <ListItemButton
-                selected={selectedWord && selectedWord.uuid === definition.uuid}
                 key={definition.uuid}
                 onClick={() => dispatch(setSelectedWord(definition))}
+                selected={selectedWord && selectedWord.uuid === definition.uuid}
                 variant="outlined"
               >
                 <ListItemText
