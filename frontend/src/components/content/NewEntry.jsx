@@ -241,8 +241,8 @@ const WordSelector = () => {
         helperText={
           recommendations || error
             ? recommendations
-              ? "Unknown English word, did you mean:"
-              : "An error occured"
+              ? "Unknown english word, did you mean:"
+              : "An error occurred"
             : undefined
         }
         id="standard-basic"
