@@ -242,7 +242,7 @@ const WordSelector = () => {
           recommendations || error
             ? recommendations
               ? "Unknown english word, did you mean:"
-              : "An error occurred"
+              : "An error occurred."
             : undefined
         }
         id="standard-basic"
