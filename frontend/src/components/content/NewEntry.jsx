@@ -367,7 +367,7 @@ const SelfInspection = () => {
         }}
       >
         <Typography sx={{ margin: 2 }} variant="h4">
-          Check if you made any mistakes
+          Please check if everything is correct
         </Typography>
         <Typography sx={{ mt: 2, mb: 0.5 }} variant="h5">
           {translation}
