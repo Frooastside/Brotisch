@@ -14,7 +14,8 @@
   },
   "homepage": "https://brotisch.wolkeneis.dev/",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -31,5 +32,9 @@
     "eslint": "^8.11.0",
     "eslint-config-prettier": "8.5.0",
     "prettier": "2.6.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint --ext .jsx --cache --fix",
+    "*.{js,jsx,css,md}": "prettier --write"
   }
 }
